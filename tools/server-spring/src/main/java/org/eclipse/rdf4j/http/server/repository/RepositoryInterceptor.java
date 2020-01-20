@@ -97,21 +97,26 @@ public class RepositoryInterceptor extends ServerInterceptor {
 	@Override
 	protected void setRequestAttributes(HttpServletRequest request) throws ClientHTTPException, ServerHTTPException {
 		String nextRepositoryID = repositoryID;
+		if (nextRepositoryID == null) {
+			return;
+		}
+
+		request.setAttribute(REPOSITORY_ID_KEY, nextRepositoryID);
+
 		if (RepositoryConfigRepository.ID.equals(nextRepositoryID)) {
-			request.setAttribute(REPOSITORY_ID_KEY, nextRepositoryID);
 			request.setAttribute(REPOSITORY_KEY, new RepositoryConfigRepository(repositoryManager));
-		} else if (nextRepositoryID != null) {
+		} else {
+			if (request.getMethod().equals("DELETE") && request.getPathInfo().endsWith(nextRepositoryID)) {
+				// delete request on the repository, we need not initialize it.
+				return;
+			}
 			try {
 				Repository repository = repositoryManager.getRepository(nextRepositoryID);
 				if (repository == null && !"PUT".equals(request.getMethod())) {
 					throw new ClientHTTPException(SC_NOT_FOUND, "Unknown repository: " + nextRepositoryID);
 				}
-
-				request.setAttribute(REPOSITORY_ID_KEY, nextRepositoryID);
 				request.setAttribute(REPOSITORY_KEY, repository);
-			} catch (RepositoryConfigException e) {
-				throw new ServerHTTPException(e.getMessage(), e);
-			} catch (RepositoryException e) {
+			} catch (RepositoryException | RepositoryConfigException e) {
 				throw new ServerHTTPException(e.getMessage(), e);
 			}
 		}
