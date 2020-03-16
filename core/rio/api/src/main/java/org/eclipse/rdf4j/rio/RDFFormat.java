@@ -263,7 +263,7 @@ public class RDFFormat extends FileFormat {
 	 */
 	public static final RDFFormat HDT = new RDFFormat("HDT",
 			Arrays.asList("application/vnd.hdt"), null, Arrays.asList("hdt"), null,
-			SUPPORTS_NAMESPACES, NO_CONTEXTS);
+			SUPPORTS_NAMESPACES, NO_CONTEXTS, NO_RDF_STAR);
 
 	/*----------------*
 	 * Static methods *
