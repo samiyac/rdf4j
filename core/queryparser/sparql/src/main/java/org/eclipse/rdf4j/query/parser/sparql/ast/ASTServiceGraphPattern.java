@@ -92,10 +92,12 @@ public class ASTServiceGraphPattern extends SimpleNode {
 
 		while (sourceString == null && theParent != null) {
 			theParent = theParent.jjtGetParent();
-			if (theParent == null)
+			if (theParent == null) {
 				break;
-			if (theParent instanceof ASTUpdateSequence)
+			}
+			if (theParent instanceof ASTUpdateSequence) {
 				sourceString = ((ASTUpdateSequence) theParent).getSourceString();
+			}
 		}
 		return sourceString;
 	}
