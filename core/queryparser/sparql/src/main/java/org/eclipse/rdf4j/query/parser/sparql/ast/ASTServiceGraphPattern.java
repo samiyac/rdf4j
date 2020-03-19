@@ -84,10 +84,11 @@ public class ASTServiceGraphPattern extends SimpleNode {
 	private String getSourceString() {
 		Node theParent = getParentContainer(this);
 		String sourceString = null;
-		if (theParent instanceof ASTOperationContainer)
+		if (theParent instanceof ASTOperationContainer) {
 			sourceString = ((ASTOperationContainer) theParent).getSourceString();
-		else if (theParent instanceof ASTUpdateSequence)
+		} else if (theParent instanceof ASTUpdateSequence) {
 			sourceString = ((ASTUpdateSequence) theParent).getSourceString();
+		}
 
 		while (sourceString == null && theParent != null) {
 			theParent = theParent.jjtGetParent();
